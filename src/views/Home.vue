@@ -13,6 +13,10 @@ export default {
   name: 'home',
   components: {
     HelloWorld
+  },
+  created() {
+    this.$store.commit("setPageTitle", "Component Basics");
+    console.log(JSON.stringify(this.$route.params));
   }
 }
 </script>

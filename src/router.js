@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import componentBasics from './views/ComponentBasics.vue'
+import ComponentBasics from './views/ComponentBasics.vue'
+import ComponentEvents from './views/ComponentEvents.vue'
 
 Vue.use(Router)
 
@@ -9,13 +10,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'Home',
+      component: Home,
+      props: {
+        pageName: "Vue Advanced Features",
+        type: "List"
+      }
     },
     {
       path: '/componentBasics',
-      name: 'componentBasics',
-      component: componentBasics
+      name: 'Component Basics',
+      component: ComponentBasics
+    },
+    {
+      path: '/componentEvents',
+      name: 'Component Communication',
+      component: ComponentEvents
     },    
     {
       path: '/about',

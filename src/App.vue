@@ -9,7 +9,7 @@
       <v-list>
         <v-divider></v-divider>
         <template v-for="(item) in menu_items">
-            <v-list-tile exact :key="item.title" :href="item.href" :to="{name: item.href}">
+            <v-list-tile exact :key="item.title" :href="item.href" :to="{name: item.title, params: item.params}">
                 <v-list-tile-action style="padding-left:10px;">
                     <v-icon light v-html="item.icon"></v-icon>
                 </v-list-tile-action>
@@ -21,16 +21,25 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="primary" dark fixed app>
+        <v-btn icon v-if="$route.params.type=='Action'" v-on:click="goBack()">
+            <v-icon>arrow_back</v-icon>
+        </v-btn>
       <v-toolbar-side-icon v-if="$route.params.type!='Action'" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
-        {{pageTitle}}
+        <template v-if="$route.params.pageName">
+          {{$route.params.pageName}}
+        </template>
+        <template v-else>
+          Vue Advanced Features
+        </template>
       </v-toolbar-title>
     </v-toolbar>
     <v-content class="grey lighten-4">
         <router-view></router-view>
     </v-content>
     <v-footer color="primary" app>
-        <span class="white--text caption pa-2 mx-3">  &copy; Made with love by Jeyabalaji</span>
+        <span class="white--text caption pa-2 mx-3">  &copy; Made with passion by Jeyabalaji Subramanian </span>
+        <a href="www.jeyabalaji.com"></a>
     </v-footer>
   </v-app>
 </template>
@@ -39,26 +48,43 @@ export default {
   data() {
     return {
       drawer: true,
-      pageTitle: this.$store.state.pageTitle,
       menu_items: [
         {
           href: "home",
           router: true,
           title: "Home",
-          icon: "home"
+          icon: "home",
+          params: {
+            pageName: "Vue Advanced Features",
+            type: "List"
+          }          
         },
         {
           href: "componentBasics",
           router: true,
           title: "Component Basics",
-          icon: "launch"
-        }
+          icon: "launch",
+          params: {
+            pageName: "Component Basics",
+            type: "Action"
+          }          
+        },
+        {
+          href: "componentEvents",
+          router: true,
+          title: "Component Communication",
+          icon: "settings_input_component",
+          params: {
+            pageName: "Component Communication",
+            type: "Action"
+          }
+        }        
       ],      
     };
   },
-  created() {
-    if (typeof this.pageTitle == 'undefined' || this.pageTitle == null) {
-      this.pageTitle = "Vue Advanced Features Demo";
+  methods: {
+    goBack: function () {
+        this.$router.go(-1);
     }
   }
 };
