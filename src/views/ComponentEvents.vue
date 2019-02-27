@@ -26,12 +26,15 @@
                 color="primary" 
                 dark
                 :loading="orderSubmitted"
-                @click.native="orderSubmitted = !orderSubmitted"
+                @click.native="orderSubmitted = !orderSubmitted; orderCompleted = false;"
             >
             Deliver Fast!
-            </v-btn>                   
+            </v-btn>    
+            <v-alert v-model="orderCompleted" outline color="info" icon="info">
+              Your food is here. Enjoy your food!
+            </v-alert>                              
           </v-card-text>
-        </v-card>
+        </v-card>     
       </v-flex>
       <v-flex xs12>
         <template v-if="orderSubmitted">
@@ -39,6 +42,7 @@
             :mini="mini"
             :noPizzas="noPizzas" 
             :noCokes="noCokes" 
+            v-on:complete="fnWorkflowCompleted()"
           >
           </WorkflowComponent>
         </template> 
@@ -61,15 +65,18 @@ export default {
         mini: false,
         noPizzas: null,
         noCokes: null,
-        orderSubmitted: false  
+        orderSubmitted: false,
+        orderCompleted: false  
       };      
     },
     methods: {
-
+      fnWorkflowCompleted: function() {
+        this.orderSubmitted = false;
+        this.orderCompleted = true;
+      }
     },
     created() {
       this.$store.commit("setPageTitle", "Component Basics");
-      console.log(JSON.stringify(this.$route.params));
     }
 }
 </script>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
     <v-card class="elevation-3">
         <v-card-title class="title">
@@ -23,21 +24,35 @@
                             :key="stage.stage_name"
                         >
                             {{ stage.stage_name }}
-                            <small>{{ stage.stage_desc}}</small>
+                            <small>{{ stage.stage_sub_title}}</small>
                         </v-stepper-step>
                         <v-divider 
                             v-if="index != workflowInstance.stages.length-1"
-                            :key="stage.stage_name"
+                            :key="index"
                         ></v-divider>
                         </template>
                     </v-stepper-header>
-                    <template v-if="!mini">
+                    <template v-if="!mini && currentStage">
                         <v-card flat>
                             <v-card-text>
-                                TBD....
+                                <div class="pa-5 ma-5 subtitle">
+                                    {{currentStage.stage_order}}
+                                </div>
+                                <div class="pa-5 ma-5 title">
+                                    {{currentStage.stage_desc}}
+                                </div>
                             </v-card-text>
                         </v-card>
                     </template>
+                    <template v-if="wfClosed">
+                        <v-card flat>
+                            <v-card-text>
+                                <div class="pa-5 ma-5 title">
+                                    {{wfClosedText}}
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </template>                    
                 </v-stepper>
             </v-card-text>
         </template>
@@ -71,31 +86,37 @@ data() {
         wfSync: false,
         wfClosed: false,
         interval: "",
+        intervalUpd: "",
         progressBar: true,
         progressActive: false,
+        currentStage: {},
+        currStageIndex: 0,
+        wfClosedText: "Order shipped. Enjoy your meal!",
         workflowInstance: {
             workflow_name: "Pizza Delivery",
             stages: [
                 {
                     stage_order: 1,
                     stage_name: "START",
-                    stage_desc: "Receiving Order" ,
+                    stage_sub_title: "Order Received",
+                    stage_desc: "Your Order is received! Please sit tight while we get it cooked...." ,
                     status: "ACTIVE"  
                 },
                 {
                     stage_order: 2,
                     stage_name: "COOK",
-                    stage_desc: "Preparing your Order...",
+                    stage_sub_title: "Preparing your Order...",
+                    stage_desc: "Yay! Started cooking your order... can't wait to deliver...." ,
                     status: "PENDING"   
                 },
                 {
                     stage_order: 3,
                     stage_name: "DELIVER",
-                    stage_desc: "Delivering your Order...",
-                    status: "PENDING"      
+                    stage_sub_title: "Delivering your Order...",
+                    stage_desc: "Here we come! Shipping your order to your home" ,
+                    status: "PENDING"
                 }
-            ],
-            currentStage: {}
+            ]            
         }
     };
 },
@@ -106,7 +127,7 @@ watch: {
                 function refreshWorkflow() {
                 this.getWorkflowSummary();
                 }.bind(this),
-                1000
+                3000
             );
         } else {
             workerInterval.clearInterval(this.interval);
@@ -115,6 +136,7 @@ watch: {
 },
 created() {
     this.wfSync = true;
+    // this.wfUpdate = true;
 },
 beforeDestroy() {
     workerInterval.clearInterval(this.interval);
@@ -129,6 +151,18 @@ methods: {
       this.progressBar = false;
       this.progressActive = false;
     },
+    fnMarkStageCompleted: function(index) {        
+        setTimeout(
+            ()=> {
+                this.workflowInstance.stages[index].status = "COMPLETED";    
+                if (index < this.workflowInstance.stages.length-1) {
+                    this.workflowInstance.stages[index+1].status = "ACTIVE";
+                    this.currStageIndex = index+1;
+                }
+            },
+            1000
+        );
+    },
     getWorkflowSummary: function() {
         this.fnActivateProgressBar();
 
@@ -137,36 +171,42 @@ methods: {
             this.workflowInstance.stages != null &&
             this.workflowInstance.stages.length > 0
         ) {
-        var index, length;
-        length = this.workflowInstance.stages.length;
-        this.stepperCount = this.workflowInstance.stages.length;
-        var completedCount = 0;
-        for (index = 0; index < length; ++index) {
-            if (
-            this.workflowInstance.stages[index].status == "ACTIVE"
-            ) {
-                this.stepperMonitor = this.workflowInstance.stages[
-                    index
-                ].stage_order;
-                this.currentStage = this.workflowInstance.stages[index];
-                break;
-            } else {
+
+            var index, length;
+            length = this.workflowInstance.stages.length;
+            this.stepperCount = this.workflowInstance.stages.length;
+            var completedCount = 0;
+            for (index = 0; index < length; ++index) {
                 if (
-                    this.workflowInstance.stages[index].status ==
-                    "COMPLETED"
+                this.workflowInstance.stages[index].status == "ACTIVE"
                 ) {
-                    completedCount = completedCount + 1;
+                    this.stepperMonitor = this.workflowInstance.stages[
+                        index
+                    ].stage_order;
+                    this.currentStage = this.workflowInstance.stages[index];
+                    break;
+                } else {
+                    if (
+                        this.workflowInstance.stages[index].status ==
+                        "COMPLETED"
+                    ) {
+                        completedCount = completedCount + 1;
+                    }
                 }
             }
+            if (completedCount >= this.stepperCount) {
+                this.fnResetProgressBar();
+                this.currentStage = null;
+                this.stepperMonitor = this.stepperCount + 1;
+                this.wfClosed = true;
+                this.wfSync = false;
+                this.$emit("complete");
+            }
         }
-        if (completedCount >= this.stepperCount) {
-            this.fnResetProgressBar();
-            this.stepperMonitor = this.stepperCount + 1;
-            this.wfClosed = true;
-            this.wfSync = false;
-            this.$emit("complete");
-        }
-        }
+
+        // Simulating a workflow operation that happens in the backend
+        this.fnMarkStageCompleted(this.currStageIndex);
+
     }        
 }
 }
