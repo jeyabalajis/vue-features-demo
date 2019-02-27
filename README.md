@@ -1,5 +1,8 @@
 # vue-features-demo
 
+## Demo link
+https://vue-features-demo.netlify.com/#/
+
 ## Project setup
 ```
 npm install
