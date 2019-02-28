@@ -158,15 +158,15 @@ computed: {
     fnGetClass() {
         switch(this.$vuetify.breakpoint.name) {
             case 'xs':
-                return "caption mt-6";
+                return "caption py-6";
             case 'sm':
-                return 'caption mt-6';
+                return "caption py-6";
             case 'md':
-                return 'subtitle mt-6';
+                return "subtitle py-6";
             case 'lg':
-                return 'title mt-6';
+                return "title py-6";
             case 'xl':
-                return 'title mt-6';
+                return "title py-6";
         }
     },
     fnGetTaskDesc() {
