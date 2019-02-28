@@ -34,13 +34,25 @@
                     </v-stepper-header>
                     <template v-if="!mini && currentStage">
                         <v-card flat>
+                            <v-card-title>
+                            </v-card-title>
                             <v-card-text>
-                                <div class="pa-5 ma-5 subtitle">
-                                    {{currentStage.stage_order}}
-                                </div>
-                                <div class="pa-5 ma-5 title">
-                                    {{currentStage.stage_desc}}
-                                </div>
+                                <v-layout row align-content-center>
+                                    <template v-if="currentStage">
+                                        <v-flex xs12 sm1>
+                                            <v-avatar color="teal">
+                                            <span class="white--text headline">
+                                                {{currentStage.stage_order}}
+                                            </span>
+                                            </v-avatar>                                
+                                        </v-flex>
+                                        <v-flex xs12 sm10>
+                                            <div class="fnGetClass">
+                                                {{fnGetTaskDesc}}
+                                            </div>
+                                        </v-flex>
+                                    </template>
+                                </v-layout>
                             </v-card-text>
                         </v-card>
                     </template>
@@ -89,7 +101,7 @@ data() {
         intervalUpd: "",
         progressBar: true,
         progressActive: false,
-        currentStage: {},
+        currentStage: null,
         currStageIndex: 0,
         wfClosedText: "Order shipped. Enjoy your meal!",
         workflowInstance: {
@@ -127,7 +139,7 @@ watch: {
                 function refreshWorkflow() {
                 this.getWorkflowSummary();
                 }.bind(this),
-                3000
+                this.noPizzas*1000+this.noCokes*200
             );
         } else {
             workerInterval.clearInterval(this.interval);
@@ -136,11 +148,41 @@ watch: {
 },
 created() {
     this.wfSync = true;
-    // this.wfUpdate = true;
+    this.getWorkflowSummary();
 },
 beforeDestroy() {
     workerInterval.clearInterval(this.interval);
     this.wfSync = false;
+},
+computed: {
+    fnGetClass() {
+        switch(this.$vuetify.breakpoint.name) {
+            case 'xs':
+                return "caption mt-6";
+            case 'sm':
+                return 'caption mt-6';
+            case 'md':
+                return 'subtitle mt-6';
+            case 'lg':
+                return 'title mt-6';
+            case 'xl':
+                return 'title mt-6';
+        }
+    },
+    fnGetTaskDesc() {
+        switch(this.$vuetify.breakpoint.name) {
+            case 'xs':
+                return this.currentStage.stage_sub_title;
+            case 'sm':
+                return this.currentStage.stage_sub_title;
+            case 'md':
+                return this.currentStage.stage_desc;
+            case 'lg':
+                return this.currentStage.stage_desc;
+            case 'xl':
+                return this.currentStage.stage_desc;
+        }
+    }
 },
 methods: {
     fnActivateProgressBar: function() {
