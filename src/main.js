@@ -4,8 +4,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Vuetify from 'vuetify' 
+import Vuelidate from 'vuelidate'
 
 Vue.config.productionTip = false
+
+Vue.use(Vuelidate);
 
 Vue.use(Vuetify, {
   theme: {

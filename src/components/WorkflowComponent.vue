@@ -41,13 +41,13 @@
                                     <template v-if="currentStage">
                                         <v-flex xs12 sm1>
                                             <v-avatar color="teal">
-                                            <span class="white--text headline">
+                                            <span class="white--text title">
                                                 {{currentStage.stage_order}}
                                             </span>
                                             </v-avatar>                                
                                         </v-flex>
                                         <v-flex xs12 sm10>
-                                            <div class="fnGetClass">
+                                            <div :class="fnGetClass">
                                                 {{fnGetTaskDesc}}
                                             </div>
                                         </v-flex>
@@ -139,7 +139,7 @@ watch: {
                 function refreshWorkflow() {
                 this.getWorkflowSummary();
                 }.bind(this),
-                this.noPizzas*1000+this.noCokes*200
+                this.noPizzas*800+this.noCokes*200
             );
         } else {
             workerInterval.clearInterval(this.interval);
@@ -156,32 +156,46 @@ beforeDestroy() {
 },
 computed: {
     fnGetClass() {
+        var myClass = '';
         switch(this.$vuetify.breakpoint.name) {
             case 'xs':
-                return "caption py-6";
+                myClass = 'caption mt-3';
+                break;
             case 'sm':
-                return "caption py-6";
+                myClass = 'caption mt-3';
+                break;
             case 'md':
-                return "subtitle py-6";
+                myClass = 'subtitle mt-3';
+                break;
             case 'lg':
-                return "title py-6";
+                myClass = 'title mt-3';
+                break;
             case 'xl':
-                return "title py-6";
+                myClass = 'title mt-5';
+                break;
         }
+        return myClass;
     },
     fnGetTaskDesc() {
+        var myTitle = '';
         switch(this.$vuetify.breakpoint.name) {
             case 'xs':
-                return this.currentStage.stage_sub_title;
+                myTitle = this.currentStage.stage_sub_title;
+                break;
             case 'sm':
-                return this.currentStage.stage_sub_title;
+                myTitle = this.currentStage.stage_sub_title;
+                break;
             case 'md':
-                return this.currentStage.stage_desc;
+                myTitle = this.currentStage.stage_desc;
+                break;
             case 'lg':
-                return this.currentStage.stage_desc;
+                myTitle = this.currentStage.stage_desc;
+                break;
             case 'xl':
-                return this.currentStage.stage_desc;
+                myTitle = this.currentStage.stage_desc;
+                break;
         }
+        return myTitle;
     }
 },
 methods: {
