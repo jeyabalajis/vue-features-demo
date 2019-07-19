@@ -77,8 +77,28 @@ export default {
             pageName: "Component Communication",
             type: "Action"
           }
+        },
+        {
+          href: "conditionalRendering",
+          router: true,
+          title: "Conditional Rendering",
+          icon: "build",
+          params: {
+            pageName: "Conditional Rendering",
+            type: "Action"
+          }
+        },
+        {
+          href: "networkFetch",
+          router: true,
+          title: "Network Fetch",
+          icon: "build",
+          params: {
+            pageName: "Network Fetch",
+            type: "Action"
+          }
         }        
-      ],      
+      ],
     };
   },
   methods: {

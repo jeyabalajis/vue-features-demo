@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import ComponentBasics from './views/ComponentBasics.vue'
 import ComponentEvents from './views/ComponentEvents.vue'
+import ConditionalRendering from './views/ConditionalRendering.vue'
+import NetworkFetch from './views/NetworkFetch.vue'
 
 Vue.use(Router)
 
@@ -27,6 +29,16 @@ export default new Router({
       name: 'Component Communication',
       component: ComponentEvents
     },    
+    {
+      path: '/conditionalRendering',
+      name: 'Conditional Rendering',
+      component: ConditionalRendering
+    },
+    {
+      path: '/networkFetch',
+      name: 'Network Fetch',
+      component: NetworkFetch
+    },
     {
       path: '/about',
       name: 'about',
