@@ -97,7 +97,17 @@ export default {
             pageName: "Network Fetch",
             type: "Action"
           }
-        }        
+        },
+        {
+          href: "listProducts",
+          router: true,
+          title: "Products Demo",
+          icon: "build",
+          params: {
+            pageName: "Products Demo",
+            type: "Action"
+          }
+        },        
       ],
     };
   },
