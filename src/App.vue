@@ -38,7 +38,7 @@
         <router-view></router-view>
     </v-content>
     <v-footer color="primary" app>
-        <span class="white--text caption pa-2 mx-3">  &copy; Made with passion by <a href="https://www.jeyabalaji.com" class="white--text caption">Jeyabalaji Subramanian </a></span>
+        <span class="white--text caption pa-2 mx-3">  &copy; Made with passion by <a href="https://jeyabalajis.github.io" class="white--text caption">Jeyabalaji Subramanian </a></span>
     </v-footer>
   </v-app>
 </template>
