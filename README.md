@@ -1,4 +1,5 @@
 # vue-features-demo
+Demo of advanced features of Vue.
 
 ## Demo link
 https://vue-features-demo.netlify.com/#/
